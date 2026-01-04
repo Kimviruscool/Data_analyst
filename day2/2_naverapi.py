@@ -1,77 +1,83 @@
-# day2
-
+import os
+import sys
 import urllib.request
+import datetime
+import time
 import json
 import urllib.parse
 
-def getRequestUrl(url):
-    request = urllib.request.Request(url)
-    request.add_header("X-Naver-client-Id","...")
-    request.add_header("X-Naver-client-Secret", "..")
+client_id = "ZL2mvZCaGouQidwZFgBJ"
+client_secret = "Sst5w27S09"
 
-    try : #예외처ㅣㄹ
-        request = urllib.request.urlopen(request)
-        if request.getcode() == 200 :
-            return request.read().decode('utf-8')
+def getRequestUrl(url):
+    req = urllib.request.Request(url)
+    req.add_header('X-Naver-Client-Id', client_id)
+    req.add_header('X-Naver-Client-Secret', client_secret)
+
+    try :
+        response = urllib.request.urlopen(req)
+        if response.getcode() == 200 :
+            print("[%s] URL Request Success" % datetime.datetime.now())
+            return response.read().decode('utf-8')
     except Exception as e :
         print(e)
+        print("[%s] Error for URL : %s" % (datetime.datetime.now(),url))
         return None
 
-def getNaverSearch(node, srcText, page_start, display):
+def getNaverSearch(node,srcText,start,display):
     base = "https://openapi.naver.com/v1/search"
-    node = f'/{node}.json'
+    node = "/%s.json"%node
+    parameters = "?query=%s&start=%s&display=%s" %(urllib.parse.quote(srcText),start, display)
 
-    srcText = urllib.parse.quote(srcText)
-
-    parameters = f'?query={srcText}&start={page_start}&display={display}'
     url = base + node + parameters
-    print(url)
+    responseDecode = getRequestUrl(url)
 
-    responseDecode = getRequestUrl(url) #응답 객체 받기
-
-    if responseDecode == None : return None #응답 객체가 없으면 None
-    else : return json.loads(responseDecode) #응답객체가 있으면 JSON형식으로 반환
+    if (responseDecode == None) :
+        return None
+    else :
+        return json.loads(responseDecode)
 
 def getPostData(post, jsonResult, cnt):
-    #응답받은 객체의 요소들
-    title = post['title']
-    description = post['description']
-    org_link = post['originallink']
+    title = post["title"]
+    description = post["description"]
+    org_link = post["originallink"]
     link = post['link']
 
-    dic = {'cnt':cnt,'title':title,'description':description,'org_link':org_link,'link':link}
-    jsonResult.append(dic)
+    pDate = datetime.datetime.strptime(post['pubDate'],'%a, %d %b %Y %H:%M:%S +0900')
+    pDate = pDate.strftime('%Y-%m-%d %H:%M:%S')
+    jsonResult.append({'cnt':cnt,'title':title, 'description':description,'org_link':org_link,'link':org_link,'pDate':pDate})
+    return
 
-def main() :
-    node = 'news' #크롤링할 대상
-    srcText = input('검색어 입력하세요.:') #2. 사용자 입력으로 받은 검색어
-    cnt = 0 #3. 검색 결과 개수
-    jsonResult = [] #4. 검색결과를 정리하여 저장한 리스트 변수
+def main():
+    node = 'news'
+    srcText = input("Enter the text you want to search : ")
+    cnt = 0
+    jsonResult = []
 
-    #5. 네이버 뉴스 검색결과를 저장하는 객체 [code2]
-    jsonResponse = getNaverSearch(node, srcText, 1, 100)
-    if jsonResponse is None:
-        print("점검필요")
-        return None
+    jsonResponse = getNaverSearch(node, srcText, 1 , 100)
 
-    total = jsonResponse['total'] #6. 전체 검색 결과 개수
+    if jsonResponse is None :
+        print("API 요청 실패...")
+        return
 
-    while( (jsonResponse != None) and (jsonResponse['display'] != 0 ) ) :
-        # 8.
-        for post in jsonResponse['items'] :
+    total = jsonResponse['total']
+
+    while ((jsonResponse != None) and (jsonResponse['display'] != 0)):
+        for post in jsonResponse["items"]:
             cnt += 1
-            #9. [code3]
             getPostData(post, jsonResult, cnt)
-        #
-        start = jsonResponse['start'] + jsonResponse['display']
 
-        if start > 1000:
-            break
+        start = jsonResponse["start"] + jsonResponse['display']
+        jsonResponse = getNaverSearch(node,srcText, start, 100)
 
-        jsonResponse = getNaverSearch(node, srcText, start, 100)
-        
-    print(f'전체검색 : {total}건')
-    print(f'가져온 데이터 {cnt}건')
+    print('전체 검색 : %d 건' %total)
 
-if __name__ == '__main__' :
+    with open('%s_naver_%s.json' % (srcText, node), 'w', encoding='utf-8') as outfile :
+        jsonFile = json.dumps(jsonResult, indent=4, sort_keys=True, ensure_ascii=False)
+        outfile.write(jsonFile)
+
+    print("가져온 데이터 : %d 건" %(cnt))
+    print('%s_naver_%s.json SAVED' % (srcText, node))
+
+if __name__ == '__main__':
     main()
