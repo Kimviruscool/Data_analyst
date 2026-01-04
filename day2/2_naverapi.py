@@ -6,8 +6,8 @@ import time
 import json
 import urllib.parse
 
-client_id = "ZL2mvZCaGouQidwZFgBJ"
-client_secret = "Sst5w27S09"
+client_id = "..." #ZL2mvZCaGouQidwZFgBJ
+client_secret = "..." #Sst5w27S09
 
 def getRequestUrl(url):
     req = urllib.request.Request(url)
