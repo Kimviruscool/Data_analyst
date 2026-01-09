@@ -1,0 +1,46 @@
+ <li data-lat="37.563674036531" data-lng="126.941917689273" data-no="409">
+          <div class="num">
+           30
+          </div>
+          <div class="store_txt">
+           <p class="name">
+            <span>
+             연세암병원점
+             <strong class="distance">
+              11,681m
+             </strong>
+            </span>
+            <a class="btn_style6" href="javascript:storePop2('409');void(0);">
+             자세히보기
+            </a>
+           </p>
+           <p class="tag">
+            <span class="decaf" title="디카페인">
+             디카페인
+            </span>
+            <span class="soy" title="두유">
+             두유
+            </span>
+            <span class="wifi" title="와이파이">
+             와이파이
+            </span>
+            <span class="cake" title="케익수령">
+             케익수령
+            </span>
+            <span class="hallcake" title="홀케익">
+             홀케익
+            </span>
+           </p>
+           <p class="address">
+            <span>
+             서울특별시 서대문구 연세로 50-1 (신촌세브란스병원) 5층 5-1
+            </span>
+            <!--span class="lot"><#StoreAddress2#></span-->
+           </p>
+           <p class="tel">
+            <a href="tel:02-392-8812">
+             02-392-8812
+            </a>
+           </p>
+          </div>
+         </li>
