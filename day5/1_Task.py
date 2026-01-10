@@ -27,3 +27,4 @@ print(wine.describe())
 sorted(wine.quality.unique())
 wine.quality.value_counts()
 
+
