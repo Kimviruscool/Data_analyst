@@ -42,3 +42,17 @@ print("회귀 계수 값 : ", np.round(lr.coef_, 1))
 coef = pd.Series(data = np.round(lr.coef_,2), index = X.columns)
 print(coef.sort_values(ascending = False))
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+fig, axs = plt.subplots(figsize=(16,12), ncols=3, nrows=5)
+
+x_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup', 'Latitude', 'Longitude']
+
+for i , feature in enumerate(x_features):
+    row = int(i/3)
+    col = i%3
+    sns.regplot(x=feature, y = 'PRICE', data = housing_df, ax = axs[row,col])
+
+if len(x_features) < 9:
+    axs[2, 2].axis('off')
