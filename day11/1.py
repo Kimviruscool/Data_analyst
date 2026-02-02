@@ -45,3 +45,11 @@ for i, feature in enumerate(x_features):
     col = i%3
     sns.regplot(x=feature, y='mpg',data=data_df, ax=axs[row,col], color=plot_color[i])
 
+c1 = int(input("c1 : "))
+d1 = int(input("d1 : "))
+w1 = int(input("w1 : "))
+a1 = int(input("a1 : "))
+m1 = int(input("m1 : "))
+
+mpg_prdict = lr.predict([[c1,d1,w1,a1,m1]])
+print(mpg_prdict)
