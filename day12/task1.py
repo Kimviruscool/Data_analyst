@@ -36,7 +36,7 @@ lr_b_cancer = LogisticRegression()
 
 lr_b_cancer.fit(x_train, y_train)
 
-Y_predict = lr_b_cancer.predict(X_test)
+Y_predict = lr_b_cancer.predict(x_test)
 
 from sklearn.metrics import confusion_matrix, accuracy_score
 from sklearn.metrics import precision_score, recall_score, f1_score, roc_auc_score
@@ -48,6 +48,7 @@ precision = precision_score(y_test, Y_predict)
 recall = recall_score(y_test, Y_predict)
 f1 = f1_score(y_test, Y_predict)
 roc_auc = roc_auc_score(y_test, Y_predict)
-print('정확도:{0.3f},정밀도:{1:3f},재현율:{2:3f},F1:{3:3f}'.format(accuracy, precision, recall, f1))
+print('정확도:{0:.3f},정밀도:{1:.3f},재현율:{2:.3f},F1:{3:.3f}'.format(accuracy, precision, recall, f1))
 
-print('ROC_AUC:{0:3f}'.format(roc_auc))
+print('ROC_AUC:{0:.3f}'.format(roc_auc))
+
