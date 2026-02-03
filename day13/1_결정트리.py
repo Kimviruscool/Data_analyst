@@ -26,3 +26,10 @@ label_name = label_name_df.iloc[:,1].values.tolist()
 
 print(label_name)
 
+from sklearn.tree import DecisionTreeClassifier
+
+dt_HAR = DecisionTreeClassifier(random_state=156)
+dt_HAR.fit(x_train, y_train)
+
+y_predict = dt_HAR.predict(x_test)
+
