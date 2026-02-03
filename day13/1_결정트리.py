@@ -33,3 +33,24 @@ dt_HAR.fit(x_train, y_train)
 
 y_predict = dt_HAR.predict(x_test)
 
+from sklearn.metrics import accuracy_score
+accuracy = accuracy_score(y_test, y_predict)
+print('결정트리예측정확도:{0:.4f}'.format(accuracy))
+
+print('하이퍼 매개변수 : \n', dt_HAR.get_params())
+
+from sklearn.model_selection import GridSearchCV
+
+params = {
+    'max_depth' : [6,8,10,12,16,20,24]
+}
+
+grid_cv = GridSearchCV(dt_HAR, param_grid=params, scoring='accuracy', cv=5, return_train_score=True)
+
+grid_cv.fit(x_train, y_train)
+
+cv_result_df = pd.DataFrame(grid_cv.cv_results_)
+
+cv_result_df[['param_max_depth','mean_test_score','mean_train_score']]
+
+print(f'최고 평균 정확도1 : {grid_cv.best_score_}, 최적 하이퍼 매개변수1 : {grid_cv.best_params_}')
