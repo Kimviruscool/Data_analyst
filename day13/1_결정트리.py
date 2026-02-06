@@ -54,3 +54,22 @@ cv_result_df = pd.DataFrame(grid_cv.cv_results_)
 cv_result_df[['param_max_depth','mean_test_score','mean_train_score']]
 
 print(f'최고 평균 정확도1 : {grid_cv.best_score_}, 최적 하이퍼 매개변수1 : {grid_cv.best_params_}')
+
+best_dt_HAR = grid_cv.best_estimator_
+best_Y_predict = best_dt_HAR.predict(x_test)
+best_accuracy = accuracy_score(y_test, best_Y_predict)
+
+print(f"Best 결정 트리 예측 정확도 : {best_accuracy}")
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+feature_importance_values = best_dt_HAR.feature_importances_
+feature_importance_values_s = pd.Series(feature_importance_values,index=x_train.columns)
+
+feature_top10 = feature_importance_values.sort_values(ascending=False)[:10]
+plt.figure(figsize = (10,5))
+plt.title('Feature Top 10')
+sns.barplot(x=feature_top10, y=feature_top10.index)
+plt.show()
+
