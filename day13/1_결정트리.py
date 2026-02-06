@@ -67,7 +67,7 @@ import matplotlib.pyplot as plt
 feature_importance_values = best_dt_HAR.feature_importances_
 feature_importance_values_s = pd.Series(feature_importance_values,index=x_train.columns)
 
-feature_top10 = feature_importance_values.sort_values(ascending=False)[:10]
+feature_top10 = feature_importance_values_s.sort_values(ascending=False)[:10]
 plt.figure(figsize = (10,5))
 plt.title('Feature Top 10')
 sns.barplot(x=feature_top10, y=feature_top10.index)
