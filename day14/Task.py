@@ -128,4 +128,30 @@ def silhoutteViz(n_cluster, X_features):
     plt.show()
 
 def clusterScatter(n_cluster, X_features):
-    print('ing')
+    c_colors= []
+    kmeans = KMeans(n_clusters=n_cluster, random_state=0)
+    Y_labels = kmeans.fit_predict(X_features)
+
+    for i in range(n_cluster):
+        c_color = cm.jet(float(i)/n_cluster)
+        c_colors.append(c_color)
+
+        plt.scatter(X_features[Y_labels == i,0], X_features[Y_labels == i,1], marker='o', c=c_colors, edgecolor='black', s = 50, label = 'cluster'+str(i))
+
+    for i in range(n_cluster):
+        plt.scatter(kmeans.cluster_centers_[i,0],kmeans.cluters_centers_[i,1], marker='^', color=c_colors[i],edgecolor='w', s=200)
+    plt.legend()
+    plt.grid()
+    plt.tight_layout()
+    plt.show()
+
+# silhouetteViz(3,X_features_scaled)
+
+best_cluster = 4
+kmeans = KMeans(n_clusters=best_cluster, random_state=0)
+Y_labels = kmeans.fit_predict(X_feature_scaled)
+
+customer_df['ClusterLabel'] = Y_labels
+print(customer_df.head())
+
+customer_df.to_csv('/Online_Retail_customer_cluster.csv')
